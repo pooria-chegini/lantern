@@ -1,0 +1,6 @@
+{% extends 'base.html' %}{% block c %}
+<div class="card"><h3>VLANs ({{rows|length}})</h3>
+<input id="f" placeholder="Filter: VLAN number or name" oninput="for(const r of document.querySelectorAll('#t tr.r'))r.style.display=r.innerText.toLowerCase().includes(this.value.toLowerCase())?'':'none'">
+<table id="t"><tr><th>VLAN</th><th>Name</th><th>Switch count</th><th>Nodes seen</th></tr>
+{% for v in rows %}<tr class="r"><td><a href="/vlan/{{v.vid}}"><b>{{v.vid}}</b></a></td><td class="ltr">{{v.names}}</td><td>{{v.nsw}}</td><td>{{v.nodes}}</td></tr>{% endfor %}
+</table></div>{% endblock %}

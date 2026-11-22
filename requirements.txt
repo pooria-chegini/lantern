@@ -1,0 +1,4 @@
+flask>=3.0
+gunicorn>=22
+netmiko>=4.3
+paramiko>=3.4,<4

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}{% block c %}
+<div class="card" style="display:flex;align-items:center;gap:14px"><img src="/static/favicon.svg" width="52" height="52" alt="">
+<div style="flex:1"><h2 style="margin:0">Audit Report &ndash; {{r.hostname}}</h2><small>LANtern &middot; {{r.created}} &middot; <span class="ltr">{{r.ip}}</span></small></div>
+<span class="noprint"><button onclick="window.print()">Print / PDF</button>
+{% if r.device_id %}<a href="/device/{{r.device_id}}">Device page</a>{% endif %}</span></div>
+<div class="card"><h3>{{r.hostname}} <small class="ltr">{{r.ip}} · {{r.platform}} · {{r.version}}</small>
+<span class="badge" style="background:{{r.score|color}}">{{r.score|score}}</span></h3>
+{% for k,v in cats.items() %}<div>{{k}}: {{v}}<div class="bar"><i style="width:{{v}}%;background:{{v|color}}"></i></div></div>{% endfor %}</div>
+<div class="card"><h3>All checks</h3>
+<p>Raw score {{r.score|score}} &middot; after statuses <b>{{eff|score}}</b>. Scores are grep-based estimates, not a full review.
+{% if r.config %}<form class="inl" method="post" action="/switch/{{r.id}}/reevaluate"><input type="hidden" name="csrf" value="{{csrf}}"><button>Re-evaluate stored config</button></form>{% endif %}</p>
+<table><tr><th>Check</th><th>Group</th><th>Severity</th><th>Confidence</th><th>Weight</th><th>Result</th><th>Evidence</th><th>Status</th></tr>
+{% for d in det %}<tr><td>{{d.title}}</td><td>{{d.cat}}</td><td>{{d.sev}}</td><td>{{d.conf}}</td><td>{{d.weight}}</td>
+<td>{% if d.score is none %}N/A{% else %}<span class="badge" style="background:{{(d.score*100)|color}}">{{(d.score*100)|round|int}}%</span>{% endif %}</td><td>{{d.detail}}</td>
+<td>{% if editable and d.score is not none and d.score<1 %}<form class="inl" method="post" action="/switch/{{r.id}}/status"><input type="hidden" name="csrf" value="{{csrf}}"><input type="hidden" name="check" value="{{d.id}}">
+<select name="status" onchange="this.form.submit()">{% for k,v in statuses %}<option value="{{k}}" {{'selected' if k==d.st}}>{{v}}</option>{% endfor %}</select></form>{% else %}-{% endif %}</td></tr>{% endfor %}</table></div>
+<div class="card"><h3>Fix suggestions (ordered by score impact)</h3>
+<p>Before applying: take a backup, fill in the &lt;...&gt; values, and test with <code>reload in 10</code>.</p>
+<pre>{{fixes or '! Nothing to fix'}}</pre></div>{% endblock %}

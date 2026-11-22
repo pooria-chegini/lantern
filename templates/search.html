@@ -1,0 +1,10 @@
+{% extends 'base.html' %}{% block c %}
+<div class="card"><h3>Search MAC / IP / name</h3><form method="get"><input name="q" value="{{q}}" placeholder="aabb.ccdd.eeff or 10.1.2.3">
+<label><input type="checkbox" name="hist" value="1" style="width:auto" {{'checked' if hist}}> Include old snapshots</label><button>Search</button></form>
+<small class="mut">The real device port is usually the one that is not an uplink and has fewer MACs behind it. IP comes from the ARP table of the last scan.</small></div>
+{% if q %}<div class="card"><table><tr><th>MAC</th><th>IP</th><th>Switch</th><th>Switch IP</th><th>Port</th><th>VLAN</th><th>Type</th><th>Description</th><th>Port status</th><th>Time</th></tr>
+{% for r in rows %}<tr {% if r.uplink or r.port_macs>1 and false %}class="mut"{% endif %}><td class="ltr">{{r.mac}}</td><td class="ltr">{{r.ips or ''}}</td>
+<td><a href="/device/{{r.did}}">{{r.hostname}}</a></td><td class="ltr">{{r.swip}}</td><td class="ltr"><b>{{r.port}}</b></td><td>{{r.vlan}}</td>
+<td>{% if r.uplink %}<span class="mut">uplink</span>{% elif r.port_macs>1 %}<span class="warn">{{r.port_macs}} MACs on port</span>{% else %}<b>access (end device)</b>{% endif %}</td>
+<td>{{r.descr or ''}}</td><td>{{r.status or ''}}{% if r.problem %} <span class="bad">!</span>{% endif %}</td><td>{{r.created}}</td></tr>
+{% else %}<tr><td colspan="10">Nothing found (is its ARP entry on a scanned L3 switch?)</td></tr>{% endfor %}</table></div>{% endif %}{% endblock %}

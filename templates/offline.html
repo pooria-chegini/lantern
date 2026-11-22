@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block c %}
+<div class="card"><h3>Offline Audit (config upload)</h3>
+<form method="post" action="/upload" enctype="multipart/form-data"><input type="hidden" name="csrf" value="{{csrf}}">
+<p class="mut">Upload one or more switch backups (txt/cfg). Score and fix suggestions are produced without connecting to the switches.</p>
+<input type="file" name="cfgfile"><button>Upload and analyse</button></form></div>
+{% endblock %}

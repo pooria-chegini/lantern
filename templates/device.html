@@ -1,0 +1,23 @@
+{% extends 'base.html' %}{% block c %}
+<div class="card"><h3>{{d.hostname}} <span class="ltr mut">{{d.ip}}</span></h3>
+{% if d.last_error %}<p class="bad">Last attempt failed ({{d.last_try}}): {{d.last_error}}</p>{% endif %}
+{% if last %}<p>Model: <b>{{last.model}}</b> | Serial: <span class="ltr">{{last.serial}}</span> | Version: <span class="ltr">{{last.version}}</span> | Uptime: {{last.uptime}} |
+Score: <span class="badge" style="background:{{last.score|color}}">{{last.score|score}}</span> | <a href="/switch/{{last.id}}">Hardening report and fixes</a></p>
+{% if last.warn %}<p class="warn">Failed commands: {{last.warn}}</p>{% endif %}{% endif %}</div>
+<div class="card"><h3>Ports</h3><table><tr><th>Port</th><th>Description</th><th>Status</th><th>VLAN</th><th>Duplex</th><th>Speed</th><th>Link quality</th><th>Problem</th></tr>
+{% for i in ifs %}<tr><td class="ltr">{{i.name}}</td><td>{{i.descr}}</td><td>{{i.status}}</td><td>{{i.vlan}}</td><td>{{i.duplex}}</td><td>{{i.speed}}</td>
+<td>{% set a=lq.get(i.name) %}{% if a %}{{a.grade}} <small>({{'%.3f'|format(a.loss_pct)+'%' if a.loss_pct is not none else 'n/a'}}, {{a.total}} pkts)</small>{% else %}-{% endif %}</td>
+<td>{% if i.problem %}<span class="{{'bad' if i.problem=='critical' else 'warn'}}">{{i.reason}}</span>{% endif %}</td></tr>{% endfor %}</table></div>
+<div class="card"><h3>Neighbors (CDP)</h3><table><tr><th>Local port</th><th>Neighbor</th><th>IP</th><th>Remote port</th><th>Platform</th></tr>
+{% for n in nbr %}<tr><td class="ltr">{{n.local_if}}</td><td>{{n.rhost}}</td><td class="ltr">{{n.rip}}</td><td class="ltr">{{n.rif}}</td><td>{{n.rplat}}</td></tr>{% endfor %}</table></div>
+<div class="card"><h3>VLANs</h3><table><tr><th>ID</th><th>Name</th><th>Status</th><th>Ports</th></tr>
+{% for v in vl %}<tr><td>{{v.vid}}</td><td>{{v.name}}</td><td>{{v.status}}</td><td class="ltr">{{v.ports}}</td></tr>{% endfor %}</table></div>
+<div class="card"><h3>Refresh</h3><details><summary>Re-scan this device (credentials are used once and never stored)</summary>
+<form method="post" action="/device/{{d.id}}/refresh"><input type="hidden" name="csrf" value="{{csrf}}">
+<input name="user" placeholder="SSH username" autocomplete="off"> <input name="pw" type="password" placeholder="Password" autocomplete="new-password"> <input name="en" type="password" placeholder="Enable (optional)" autocomplete="new-password"> <button>Refresh</button></form></details></div>
+<div class="card"><h3>Score trend</h3>{{spark|safe if spark else 'Need at least two scans.'}}
+{% if imp or reg %}<table><tr><th>Check</th><th>Previous</th><th>Now</th><th>Change</th></tr>
+{% for t,o,n in imp %}<tr><td>{{t}}</td><td>{{o}}%</td><td>{{n}}%</td><td class="g-Excellent">Improved</td></tr>{% endfor %}
+{% for t,o,n in reg %}<tr><td>{{t}}</td><td>{{o}}%</td><td>{{n}}%</td><td class="g-Poor">Regressed</td></tr>{% endfor %}</table>{% elif spark %}<p class="mut">No check changed since the previous scan.</p>{% endif %}</div>
+<div class="card"><h3>History ({{hist|length}})</h3><table><tr><th>Time</th><th>Score</th><th>Version</th><th>Port problems</th></tr>
+{% for h in hist %}<tr><td><a href="/switch/{{h.id}}">{{h.created}}</a></td><td>{{h.score|score if h.score is not none else "—"}}</td><td class="ltr">{{h.version}}</td><td>{{h.nprob}}</td></tr>{% endfor %}</table></div>{% endblock %}

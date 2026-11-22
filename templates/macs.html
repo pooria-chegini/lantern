@@ -1,0 +1,6 @@
+{% extends 'base.html' %}{% block c %}
+<div class="card"><h3>MAC addresses ({{rows|length}})</h3>
+<input id="f" placeholder="Filter: MAC, vendor, node, IP, VLAN" oninput="for(const r of document.querySelectorAll('#t tr.r'))r.style.display=r.innerText.toLowerCase().includes(this.value.toLowerCase())?'':'none'">
+<table id="t"><tr><th>Vendor</th><th>MAC</th><th>VLAN</th><th>Device type (guess)</th><th>Node</th><th>Link</th><th>Probable IP</th><th>Switch / port</th></tr>
+{% for m in rows %}<tr class="r"><td><span class="badge">{{m.badge}}</span> {{m.vendor}}</td><td class="ltr">{{m.mac}}</td><td>{{m.vlan}}</td><td>{{m.guess}}</td><td>{{m.node}}</td><td>{{m.grade}}</td><td class="ltr">{{m.ip or '-'}}</td><td>{{m.switch}} {{m.port}}{% if m.uplink %} <small>(uplink)</small>{% endif %}</td></tr>{% endfor %}
+</table></div>{% endblock %}

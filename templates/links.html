@@ -1,0 +1,6 @@
+{% extends 'base.html' %}{% block c %}
+<div class="card"><h3>Link quality ({{rows|length}} ports)</h3>
+<p><small>Loss % = (input errors + CRC + output errors + output drops) / total packets. Fewer than 1,000 packets = too low to judge.</small></p>
+<table><tr><th>Switch</th><th>Port</th><th>Packets</th><th>Errors</th><th>Loss %</th><th>Grade</th></tr>
+{% for r in rows %}<tr><td>{{r.switch}}</td><td>{{r.port}}</td><td>{{r.total}}</td><td>{{r.errors}}</td><td>{{'%.3f'|format(r.loss) if r.loss is not none else '-'}}</td><td>{{r.grade}}</td></tr>{% endfor %}
+</table></div>{% endblock %}

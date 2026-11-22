@@ -1,0 +1,8 @@
+{% extends 'base.html' %}{% block c %}
+<div class="card"><h3>Devices ({{devs|length}})</h3><div class="tw"><table>
+<tr><th>Name</th><th>IP</th><th>Model</th><th>Version</th><th>Score</th><th>Port problems</th><th>Last OK</th><th>Status</th><th></th></tr>
+{% for d in devs %}<tr><td><a href="/device/{{d.id}}">{{d.hostname or '—'}}</a></td><td class="ltr">{{d.ip}}</td><td>{{d.model or d.platform or ''}}</td>
+<td class="ltr">{{d.version or ''}}</td>
+<td>{% if d.score is not none %}<span class="badge" style="background:{{d.score|color}}">{{d.score|score}}</span>{% endif %}</td>
+<td>{% if d.nprob %}<span class="bad">{{d.nprob}}</span>{% else %}0{% endif %}</td><td>{{d.last_ok or '—'}}</td>
+<td>{% if d.last_error %}<span class="bad" title="{{d.last_error}}">Failed</span>{% else %}OK{% endif %}</td><td><form class="inl" method="post" action="/device/{{d.id}}/delete" onsubmit="return confirm('Delete this device and all its results?')"><input type="hidden" name="csrf" value="{{csrf}}"><button class="danger">Delete</button></form></td></tr>{% endfor %}</table></div></div>{% endblock %}

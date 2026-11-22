@@ -1,0 +1,13 @@
+{% extends 'base.html' %}{% block c %}
+<div class="card"><h3>VLAN {{vid}} {% if sw %}<span class="mut ltr">{{sw[0].name}}</span>{% endif %}</h3>
+{% if not sw %}<p class="mut">This VLAN is not on any scanned switch.</p>{% endif %}</div>
+{% if sw %}<div class="card"><h4>Switches carrying this VLAN ({{sw|length}})</h4><table>
+<tr><th>Switch</th><th>IP</th><th>VLAN status</th><th>Nodes</th><th>Access ports</th></tr>
+{% for s in sw %}<tr><td><a href="/device/{{s.did}}">{{s.hostname}}</a></td><td class="ltr">{{s.ip}}</td><td>{{s.status}}</td><td>{{s.nodes}}</td><td class="ltr" style="font-size:12px">{{s.ports or '—'}}</td></tr>{% endfor %}</table></div>
+<div class="card"><h4>Nodes ({{nodes|length}})</h4>
+<input placeholder="Filter: MAC / IP / switch / port" oninput="for(const r of document.querySelectorAll('#n tr.r'))r.style.display=r.innerText.toLowerCase().includes(this.value.toLowerCase())?'':'none'">
+<table id="n"><tr><th>MAC</th><th>IP</th><th>Switch</th><th>Port</th><th>Port description</th><th>Type</th></tr>
+{% for n in nodes %}<tr class="r"><td class="ltr"><a href="/search?q={{n.mac}}">{{n.mac}}</a></td><td class="ltr">{{n.ips or ''}}</td>
+<td><a href="/device/{{n.did}}">{{n.hostname}}</a></td><td class="ltr">{{n.port}}</td><td>{{n.descr or ''}}</td>
+<td>{% if n.uplink %}<span class="mut">uplink/trunk</span>{% else %}End port{% endif %}{% if n.problem %} <span class="bad">!</span>{% endif %}</td></tr>{% endfor %}</table>
+<small class="mut">Nodes come from the MAC table and the ARP table of each switch's last scan. IP is filled only when the ARP entry is on a scanned switch.</small></div>{% endif %}{% endblock %}

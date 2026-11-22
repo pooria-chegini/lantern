@@ -1,0 +1,6 @@
+{% extends 'base.html' %}{% block c %}
+{% if down %}<div class="card"><h3>Unreachable switches ({{down|length}})</h3><table><tr><th>Name</th><th>IP</th><th>Error</th><th>Time</th></tr>
+{% for d in down %}<tr><td><a href="/device/{{d.id}}">{{d.hostname or '—'}}</a></td><td class="ltr">{{d.ip}}</td><td>{{d.last_error}}</td><td>{{d.last_try}}</td></tr>{% endfor %}</table></div>{% endif %}
+<div class="card"><h3>Port problems ({{rows|length}})</h3><table><tr><th>Severity</th><th>Switch</th><th>Switch IP</th><th>Port</th><th>Port description</th><th>Problem</th><th>Link quality</th><th>Date / Time</th></tr>
+{% for r in rows %}<tr><td class="{{'bad' if r.problem=='critical' else 'warn'}}">{{r.problem}}</td><td><a href="/device/{{r.did}}">{{r.hostname}}</a></td>
+<td class="ltr">{{r.ip}}</td><td class="ltr">{{r.name}}</td><td>{{r.descr}}</td><td>{{r.reason}}</td><td>{{r.grade}}{% if r.loss is not none %} ({{'%.3f'|format(r.loss)}}%){% endif %}</td><td>{{r.created}}</td></tr>{% endfor %}</table></div>{% endblock %}

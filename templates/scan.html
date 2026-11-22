@@ -1,0 +1,9 @@
+{% extends 'base.html' %}{% block c %}
+{% if s.status=='running' %}<meta http-equiv="refresh" content="5">{% endif %}
+<div class="card"><h3>Scan #{{s.id}} — {{s.status}} ({{s.done}}/{{s.total}}, SSH open: {{s.found}})
+{% if s.avg %}<span class="badge" style="background:{{s.avg|color}}">Average {{s.avg|round(1)}}</span>{% endif %}</h3>
+<a href="/scan/{{s.id}}.csv">Download CSV</a></div>
+<div class="card"><table><tr><th>Score</th><th>Hostname</th><th>IP</th><th>Model</th><th>Version</th><th></th></tr>
+{% for r in rows %}<tr><td>{% if r.score is not none %}<span class="badge" style="background:{{r.score|color}}">{{r.score|score}}</span>{% else %}—{% endif %}</td>
+<td><a href="/switch/{{r.id}}">{{r.hostname or '—'}}</a></td><td class="ltr">{{r.ip}}</td><td>{{r.platform}}</td><td class="ltr">{{r.version}}</td>
+<td>{{r.error or ''}}</td></tr>{% endfor %}</table></div>{% endblock %}

@@ -1,0 +1,79 @@
+<!doctype html><html lang="en" dir="ltr"><head><meta charset="utf-8"><title>LANtern</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<style>
+:root{--t:#0d9488;--bg:#f0f2f5}*{box-sizing:border-box}
+body{font-family:Roboto,Helvetica,Arial,sans-serif;background:var(--bg);margin:0;color:#344767;font-size:14px;display:flex;min-height:100vh}
+aside{width:230px;background:#fff;margin:14px;border-radius:12px;padding:16px 10px;box-shadow:0 2px 12px #0001;flex:none;align-self:flex-start;position:sticky;top:14px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:19px;color:#344767;text-decoration:none;padding:4px 8px 16px}
+aside nav a{display:block;color:#344767;text-decoration:none;padding:10px 12px;border-radius:8px;margin:2px 0}
+aside nav a:hover{background:linear-gradient(135deg,#14b8a6,#0d9488);color:#fff}
+main{flex:1;padding:14px 20px;max-width:1300px}
+.card{background:#fff;border-radius:12px;padding:18px 20px;margin-bottom:18px;box-shadow:0 2px 12px #0001}
+.card h3,.card h4{margin:0 0 12px}
+table{width:100%;border-collapse:collapse}th{color:#7b809a;font-size:12px;text-transform:uppercase}
+th,td{padding:9px 11px;border-bottom:1px solid #eee;text-align:left}
+a{color:var(--t);text-decoration:none}a.btn{display:inline-block;background:linear-gradient(135deg,#14b8a6,#0d9488);color:#fff;padding:5px 12px;border-radius:8px;margin:2px}a.btn.alt{background:#eef1f5;color:#344767}
+input,textarea,button{font:inherit;padding:8px 10px;margin:3px 0}
+input,textarea{width:100%;border:1px solid #d2d6da;border-radius:6px}
+button{background:linear-gradient(135deg,#14b8a6,#0d9488);color:#fff;border:0;border-radius:8px;padding:8px 18px;cursor:pointer}
+button.danger{background:#e53935}
+.badge{color:#fff;border-radius:12px;padding:2px 11px;font-weight:700}
+pre{background:#10151c;color:#d6e2f0;padding:12px;border-radius:8px;overflow:auto;white-space:pre-wrap}
+.bad{color:#c0392b;font-weight:700}.warn{color:#d68910}.mut{color:#8590a2}.flash{background:#e0f7f4;padding:10px 14px;border-radius:8px;margin-bottom:14px}
+.ltr{display:inline-block}.bar{height:8px;background:#e1e6ee;border-radius:4px}.bar>i{display:block;height:8px;border-radius:4px}small{color:#7b809a}
+td{vertical-align:middle;white-space:normal;word-break:break-word;overflow-wrap:anywhere}form.inl{margin:0;display:inline}.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}img,svg{max-width:100%}.card{overflow-x:hidden}main{min-width:0}
+aside nav a{display:flex;align-items:center;gap:10px}.ic{display:inline-flex;width:30px;height:30px;border-radius:8px;align-items:center;justify-content:center;background:#eef1f5;color:#0d9488}aside nav a:hover .ic{background:#fff3}
+table{width:100%;table-layout:auto}.tw{overflow-x:visible}
+.fr th{padding:4px 6px;text-transform:none}.fr select,.fr input{width:100%;min-width:70px;padding:4px;margin:0;font-size:12px}
+th.s{cursor:pointer;user-select:none}th.s:hover{color:#0d9488}
+.pg{display:flex;gap:10px;align-items:center;margin-top:10px;font-size:13px;flex-wrap:wrap}.pg button,.pg select{padding:4px 12px;margin:0;width:auto}
+.g-Excellent{color:#15803d;font-weight:700}.g-Good{color:#65a30d;font-weight:700}.g-Fair{color:#d97706;font-weight:700}.g-Poor{color:#dc2626;font-weight:700}.g-Low{color:#8590a2}
+@media print{aside,.noprint,form{display:none!important}body{background:#fff}.card{box-shadow:none}}
+@media(max-width:800px){body{flex-direction:column}aside{width:auto;margin:8px;position:static;align-self:stretch}aside nav{display:flex;flex-wrap:wrap;gap:4px}main{padding:8px 10px;max-width:100%}th,td{padding:7px 8px;font-size:13px}.g{display:block}}
+a.btn.rep{background:#7c3aed}a.btn.dev{background:#facc15;color:#111}
+.donut{width:46px;height:46px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;font-size:11px;font-weight:600}
+.donut i{width:34px;height:34px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-style:normal}
+</style></head><body>
+<aside><a class="logo" href="{{ '/devices' if session.u else '/login' }}"><img src="/static/favicon.svg" width="32" height="32" alt="">LANtern</a>
+{% if session.u %}<nav><a href="/devices"><span class="ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18v6H3zM3 13h18v6H3zM7 8h.01M7 16h.01"/></svg></span>Devices</a><a href="/vlans"><span class="ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5zM3 13l9 5 9-5"/></svg></span>VLANs</a><a href="/macs"><span class="ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4zM8 9h8M8 13h8M8 17h5"/></svg></span>MACs</a><a href="/links"><span class="ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-7 4 14 3-7h4"/></svg></span>Link quality</a><a href="/hardening"><span class="ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></span>Hardening</a><a href="/problems"><span class="ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l10 18H2zM12 10v5M12 18h.01"/></svg></span>Port problems</a><a href="/offline"><span class="ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5M4 20h16"/></svg></span>Offline Audit</a><a href="/"><span class="ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 100-6 3 3 0 000 6zM19 12a7 7 0 00-.1-1.2l2-1.5-2-3.4-2.4 1a7 7 0 00-2-1.2L14 3h-4l-.5 2.7a7 7 0 00-2 1.2l-2.4-1-2 3.4 2 1.5a7 7 0 000 2.4l-2 1.5 2 3.4 2.4-1a7 7 0 002 1.2L10 21h4l.5-2.7a7 7 0 002-1.2l2.4 1 2-3.4-2-1.5c.1-.4.1-.8.1-1.2z"/></svg></span>Setting</a><a href="{{github_url}}" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.9a3.4 3.4 0 00-1-2.6c3.3-.4 6.8-1.6 6.8-7.3A5.7 5.700 0 0019.3 4.800 5.300 5.300 0 0019.200 1S18 .7 15 2.700a13.400 13.400 0 00-7 0C5 .7 3.800 1 3.800 1a5.300 5.300 0 00-.1 3.800A5.700 5.700 0 002.200 8.800c0 5.700 3.500 6.900 6.800 7.300a3.400 3.400 0 00-1 2.600V22"/></svg></span>GitHub</a></nav>
+<form method="get" action="/search"><input name="q" placeholder="Search MAC / IP / name"></form>
+<form method="post" action="/logout"><input type="hidden" name="csrf" value="{{csrf}}"><button>Logout</button></form>{% endif %}</aside>
+<main>{% for m in get_flashed_messages() %}<div class="flash">{{m}}</div>{% endfor %}{% block c %}{% endblock %}</main><script>
+(function(){
+var G={'Excellent':'g-Excellent','Good':'g-Good','Fair':'g-Fair','Poor':'g-Poor','Too low':'g-Low'};
+document.querySelectorAll('main td').forEach(function(td){var t=td.textContent.trim();for(var k in G){if(t.indexOf(k)===0&&t.length<40&&!td.children.length){td.className+=' '+G[k];break}}});
+function num(v){var m=v.replace(/,/g,'').match(/^-?\d+(\.\d+)?/);return m?parseFloat(m[0]):null}
+document.querySelectorAll('main table').forEach(function(tb){
+ var all=[].slice.call(tb.rows);var hd=all.filter(function(r){return r.querySelector('th')})[0];
+ var rows=all.filter(function(r){return r!==hd&&!r.querySelector('td[colspan]')});
+ if(!hd||rows.length<3)return;
+ var n=hd.cells.length,st={p:0,sz:50,col:-1,asc:1,f:[]},body=hd.parentNode;
+ var wrap=document.createElement('div');wrap.className='tw';tb.parentNode.insertBefore(wrap,tb);wrap.appendChild(tb);
+ var fr=document.createElement('tr');fr.className='fr';
+ for(var i=0;i<n;i++){(function(i){
+  var th=document.createElement('th'),vals={};rows.forEach(function(r){if(r.cells[i])vals[r.cells[i].textContent.trim()]=1});
+  var keys=Object.keys(vals).sort(),el;
+  if(keys.length>1&&keys.length<=40&&keys.length<rows.length){el=document.createElement('select');el.innerHTML='<option value="">All</option>'+keys.map(function(k){return '<option>'+k.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</option>'}).join('');el.onchange=function(){st.f[i]={e:el.value};st.p=0;draw()}}
+  else if(keys.length>1){el=document.createElement('input');el.placeholder='filter';el.oninput=function(){st.f[i]={c:el.value.toLowerCase()};st.p=0;draw()}}
+  if(el)th.appendChild(el);fr.appendChild(th);
+  var h=hd.cells[i];h.className+=' s';h.onclick=function(){st.asc=(st.col===i)?-st.asc:1;st.col=i;draw()};
+ })(i)}
+ hd.parentNode.insertBefore(fr,hd.nextSibling);
+ var pg=document.createElement('div');pg.className='pg';wrap.parentNode.insertBefore(pg,wrap.nextSibling);
+ function draw(){
+  var v=rows.filter(function(r){for(var i=0;i<n;i++){var f=st.f[i];if(!f)continue;var t=(r.cells[i]?r.cells[i].textContent.trim():'');
+   if(f.e!==undefined&&f.e!==''&&t!==f.e)return false;if(f.c&&t.toLowerCase().indexOf(f.c)<0)return false}return true});
+  if(st.col>=0)v.sort(function(a,b){var x=a.cells[st.col].textContent.trim(),y=b.cells[st.col].textContent.trim(),p=num(x),q=num(y);
+   var c=(p!==null&&q!==null)?p-q:x.localeCompare(y,undefined,{numeric:true});return c*st.asc});
+  var pages=Math.max(1,Math.ceil(v.length/st.sz));if(st.p>=pages)st.p=pages-1;
+  rows.forEach(function(r){r.style.display='none'});
+  v.forEach(function(r,i){body.appendChild(r);r.style.display=(i>=st.p*st.sz&&i<(st.p+1)*st.sz)?'':'none'});
+  [].forEach.call(hd.cells,function(h,i){h.textContent=h.textContent.replace(/ [▲▼]$/,'')+(i===st.col?(st.asc>0?' ▲':' ▼'):'')});
+  pg.innerHTML='<span>'+v.length+' rows</span><button type="button" id="pv">Prev</button><span>Page '+(st.p+1)+' / '+pages+'</span><button type="button" id="nx">Next</button><span>Rows per page <select id="sz">'+[50,100,150,200].map(function(x){return '<option'+(x===st.sz?' selected':'')+'>'+x+'</option>'}).join('')+'</select></span>';
+  pg.querySelector('#pv').onclick=function(){if(st.p>0){st.p--;draw()}};pg.querySelector('#nx').onclick=function(){if(st.p<pages-1){st.p++;draw()}};
+  pg.querySelector('#sz').onchange=function(e){st.sz=+e.target.value;st.p=0;draw()};
+ }
+ draw();
+});})();
+</script></body></html>

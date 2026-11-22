@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% block c %}
+<div class="card"><h3>Hardening - all devices</h3>
+<p class="mut">Score after remediation statuses. Grep-based estimate, not a full review.</p>
+<table><tr><th>Device</th><th>IP</th><th>Score</th><th>Open findings</th>{% set names = [] %}{% for r in rows %}{% for k in r.cats %}{% if k not in names %}{% set _ = names.append(k) %}{% endif %}{% endfor %}{% endfor %}{% for n in names %}<th>{{n}}</th>{% endfor %}<th></th></tr>
+{% for r in rows %}<tr><td>{{r.d.hostname or '-'}}</td><td class="ltr">{{r.d.ip}}</td>
+<td>{% if r.eff is not none %}<span class="badge" style="background:{{r.eff|color}}">{{r.eff|score}}</span>{% else %}-{% endif %}</td><td>{{r.open}}</td>
+{% for n in names %}<td>{% if n in r.cats %}<span class="donut" style="background:conic-gradient({{r.cats[n]|color}} {{r.cats[n]}}%,#e5e7eb 0)"><i>{{r.cats[n]}}%</i></span>{% else %}-{% endif %}</td>{% endfor %}
+<td style="white-space:nowrap">{% if r.d.last_result_id %}<a class="btn rep" href="/switch/{{r.d.last_result_id}}">Audit Report</a> {% endif %}<a class="btn dev" href="/device/{{r.d.id}}">Device Details</a></td></tr>{% endfor %}</table></div>{% endblock %}
